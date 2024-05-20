@@ -1,0 +1,11 @@
+.vscode/
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+Assets/Resources.meta
+/Library/
+/Logs/
+/Packages/
+/ProjectSettings/
+Project_FlowParsing.sln
+/Temp/
+/UserSettings/

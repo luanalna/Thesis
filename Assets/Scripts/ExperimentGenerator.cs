@@ -29,6 +29,13 @@ public class ExperimentGenerator : MonoBehaviour
     public AdjustablePaddle adjustablePaddle;
     public Particles particles;
 
+
+    // TIMING SETTINGS
+    public static float timeAtBeginningSpacebarPress = 0.0f; // time when the subject is ready to start the experiment
+    public static float timeTargetToFall = 3.0f; // time for the ball to fall after spacebar is pressed
+
+
+    // VECTORS
     public static Vector3[] targetStartingVelocities;
 
     public static Vector3[] startTargetPosition;
@@ -61,21 +68,29 @@ public class ExperimentGenerator : MonoBehaviour
     {
         /* after the first presentation page (start()) is showed, 
         keep everything in pause. 
+        
         If continue button is pressed, and if
         There is valid data for a new experiment on the csv file:
         Start the animation, 
         wait the time it needs to be executed, reset everything,
         popout the answer screen with the draggable stick. */
 
-        if(isStartButtonPressed && isNextTrialDataValid()){
+        if(isStartButtonPressed && isNextTrialDataValid())
+        {         
+            
+             // set the target velocity
+            target.SetTarget(targetFallingDirection);
 
+            // set the camera velocity
+            viewCamera.SetCamera(cameraRotationDirection);
 
-
+            //start the animation 
+            startPanel.gameObject.SetActive(false);
 
             isStartButtonPressed = false;
         }
 
-        if (isContinueButtonPressed && isNextTrialDataValid())
+        else if (isContinueButtonPressed && isNextTrialDataValid())
         {
             // set the target velocity
             target.SetTarget(targetFallingDirection);
