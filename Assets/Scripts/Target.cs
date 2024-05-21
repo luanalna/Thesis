@@ -5,7 +5,7 @@ public class Target : MonoBehaviour
 {
 
     // initiali Target's positions
-    public Vector3 startingTargetPosition = new Vector3(0f, 9f, 20f);
+    public Vector3 startingTargetPosition = new Vector3(2f, 26f, 20f);
     // initial Target's fall velocity
     Vector3 fallVelocity = new Vector3(0f, 0f, 0f);
 
@@ -29,4 +29,21 @@ public class Target : MonoBehaviour
         // reset target's velocity
         fallVelocity.y *= dir; // vel y = vel y * dir;
     }
+
+    // Overload SetTarget without parameters
+    public void SetTarget()
+    {
+        SetTarget(1f); // Default direction value
+    }
+    public void startFalling()
+    
+    {
+            fall = true;
+    }
+
+    public void stopFalling()
+    {
+            fall = false;
+    }
 }
+

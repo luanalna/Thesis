@@ -60,3 +60,4 @@ public class DataRow
     public float Direction { get; set; }
     public float Angle { get; set; }
 }
+

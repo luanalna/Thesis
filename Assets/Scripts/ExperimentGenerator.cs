@@ -19,7 +19,7 @@ public class ExperimentGenerator : MonoBehaviour
     // Buttons
     public Button startButton;
     public Button endButton;
-    public Button endBlock;
+    public Button endBlockButton;
     public Button continueButton;
 
     //Others
@@ -30,16 +30,15 @@ public class ExperimentGenerator : MonoBehaviour
     public Particles particles;
 
 
-    // TIMING SETTINGS
-    public static float timeAtBeginningSpacebarPress = 0.0f; // time when the subject is ready to start the experiment
+    // TIMING SETTInGS
+    public static float startTime = 0.0f; // reset time when you click the start button
     public static float timeTargetToFall = 3.0f; // time for the ball to fall after spacebar is pressed
+    public float deltaTime = 0.0f;
 
 
     // VECTORS
     public static Vector3[] targetStartingVelocities;
-
     public static Vector3[] startTargetPosition;
-
 
 
     float cameraRotationDirection = 1; // init camera rotation right
@@ -47,11 +46,16 @@ public class ExperimentGenerator : MonoBehaviour
 
     private bool isAnimationPlaying = false;
     private bool isWaitingForSubjectAnswer = false;
+    private bool blockEnded = false;
 
-    bool isContinueButtonPressed = false;
-    bool isStartButtonPressed = false;
-    bool isEndButtonPressed = false;
-    bool isEndBlockButtonPressed = false;
+    bool continueButtonPressed = false;
+    bool startButtonPressed = false;
+    bool endButtonPressed = false;
+    bool nextBlockButtonPressed = false;
+    bool startTimeOnClick = false;
+
+    
+
     void Start() 
     {
         paddlePanel.gameObject.SetActive(false);
@@ -60,79 +64,62 @@ public class ExperimentGenerator : MonoBehaviour
         particles.create = true;
         continueButton.onClick.AddListener(OnContinueClick);
         startButton.onClick.AddListener(OnStartClick);
-        endButton.onClick.AddListener(OnContinueClick);
-        endBlock.onClick.AddListener(OnContinueClick);
+        endButton.onClick.AddListener(OnEndClick);
+        endBlockButton.onClick.AddListener(OnNextBlockClick);
     }
 
-    void Update()
+void Update()
+{
+    /* After the first presentation page (start()) is shown,
+    keep everything in pause.
+    
+    If the continue button is pressed, and if there is valid data
+    for a new experiment in the CSV file:
+    Start the animation, wait the time it needs to be executed, reset everything,
+    pop out the answer screen with the draggable stick. */
+
+    if ((startButtonPressed || continueButtonPressed) && isNextTrialDataValid())
     {
-        /* after the first presentation page (start()) is showed, 
-        keep everything in pause. 
-        
-        If continue button is pressed, and if
-        There is valid data for a new experiment on the csv file:
-        Start the animation, 
-        wait the time it needs to be executed, reset everything,
-        popout the answer screen with the draggable stick. */
+        // Set the target velocity
+        target.SetTarget(targetFallingDirection);
 
-        if(isStartButtonPressed && isNextTrialDataValid())
-        {         
-            
-             // set the target velocity
-            target.SetTarget(targetFallingDirection);
+        // Set the camera velocity
+        viewCamera.SetCamera(cameraRotationDirection);
 
-            // set the camera velocity
-            viewCamera.SetCamera(cameraRotationDirection);
+        target.fall = true;
 
-            //start the animation 
-            startPanel.gameObject.SetActive(false);
+        // Start the animation 
+        startPanel.gameObject.SetActive(false);
 
-            isStartButtonPressed = false;
-        }
-
-        else if (isContinueButtonPressed && isNextTrialDataValid())
-        {
-            // set the target velocity
-            target.SetTarget(targetFallingDirection);
-
-            // set the camera velocity
-            viewCamera.SetCamera(cameraRotationDirection);
-
-            //start the animatiion 
-            startPanel.gameObject.SetActive(false);
-
-        }
-
-        // UNTRIGGEER
-        if(isAnimationPlaying)
-        {
-            /* do nothing let the animation play */
-            // update thee time
-            
-        }
-        else if(isWaitingForSubjectAnswer)
-        {
-
-            paddlePanel.gameObject.SetActive(true);
-
-        }
-        else
-        {
-
-        }
-
-            
-
-
-
-        /* If continue button is pressed, and if
-        There is valid data for a new experiment on the csv file,
-        and if the answer have been recorderd,
-        Start the animation: */
-
-
+        isAnimationPlaying = true;
     }
 
+
+    // UNTRIGGEER
+    if (isAnimationPlaying == true);
+    {
+        target.fall
+    }
+    else if (isWaitingForSubjectAnswer)
+    {
+        paddlePanel.gameObject.SetActive(true);
+    }
+    else
+    {
+        // Additional logic if needed when neither animation is playing nor waiting for subject answer
+    }
+}
+
+
+
+    else if (nextBlockButtonPressed) // Remove the semicolon here
+    {
+        // StartNewBlock();
+    }
+    else if (endButtonPressed) // Remove the semicolon here
+    {
+        // ExitAndSave();
+    }
     bool isNextTrialDataValid()
     {
         
@@ -157,21 +144,28 @@ public class ExperimentGenerator : MonoBehaviour
         return  readDataSuccess;
     }
 
-    void ShowAnimation()
-    {
-        isContinueButtonPressed = false;
-        isAnimationPlaying = true;
-        target.fall = true;
-        viewCamera.rotate = true;
-    }
-
     void OnContinueClick()
     {
-        isContinueButtonPressed = true;
+        continueButtonPressed = true;
+        startTimeOnClick = true;
     }
     void OnStartClick()
     {
-        isStartButtonPressed = true;
+        startButtonPressed = true;
+        startTimeOnClick = true;
     }
 
-}
+    void OnNextBlockClick()
+    {
+        nextBlockButtonPressed = true;
+        startTimeOnClick = true;
+    }
+
+    void OnEndClick()
+    {
+        endButtonPressed = true;
+    }
+
+    
+
+
