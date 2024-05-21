@@ -40,6 +40,7 @@ public class ExperimentGenerator : MonoBehaviour
         paddlePanel.gameObject.SetActive(false);
         startPanel.gameObject.SetActive(true);
         endPanel.gameObject.SetActive(false);
+        endBlockPanel.gameObject.SetActive(false);
         particles.create = true;
 
         // Add button listeners

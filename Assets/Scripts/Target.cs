@@ -5,13 +5,15 @@ public class Target : MonoBehaviour
     // Initial Target's positions
     public Vector3 startingTargetPosition = new Vector3(2f, 26f, 20f);
     // Initial Target's fall velocity
+    Vector3 startingFallVlocity = new Vector3(0f, 0f, 0f);
     Vector3 fallVelocity = new Vector3(0f, 0f, 0f);
 
-    public bool fall = false;
+public bool fall = false;
 
     void Start()
     {
         fall = false;
+        transform.position = startingTargetPosition;
     }
 
     void Update()
@@ -30,7 +32,8 @@ public class Target : MonoBehaviour
         // Reset target's position
         transform.position = startingTargetPosition;
         // Reset target's velocity
-        fallVelocity.y = dir * Mathf.Abs(fallVelocity.y); // Ensure velocity direction is set correctly
+        fallVelocity = startingFallVlocity;
+        fallVelocity.x = dir * 2; // Ensure velocity direction is set correctly
     }
 
     public void startFalling()
