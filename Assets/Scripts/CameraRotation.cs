@@ -9,21 +9,30 @@ public class CameraRotation : MonoBehaviour
     float rotationSpeed = 15.0f; // rotational speed
 
     void Start()
-    
     {
         originalPosition = transform.position;
         originalRotation = transform.rotation;
     }
 
-void Update()
-{
-    if (rotate)
+    void Update()
     {
-        // Rotate the camera around its Y-axis
-        transform.Rotate(Vector3.up, rotationSpeed * rotationDirection * Time.deltaTime);
+        if (rotate)
+        {
+            // Rotate the camera around its Y-axis
+            transform.Rotate(Vector3.up, rotationSpeed * rotationDirection * Time.deltaTime);
+        }
     }
-}
-public void SetCamera(float dir){
-    rotationDirection = dir;
-}
+
+    public void SetCamera(float dir)
+    {
+        rotationDirection = dir;
+        rotate = true; // Ensure the camera starts rotating when direction is set
+    }
+
+    public void ResetCamera()
+    {
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+        rotate = false; // Stop rotation
+    }
 }
